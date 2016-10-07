@@ -2,8 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7r1vtotrifp1u4h4?svg=true)](https://ci.appveyor.com/project/madskristensen/packagesecurity)
 
-<!-- Update the VS Gallery link after you upload the VSIX-->
-Download this extension from the [VS Gallery](https://visualstudiogallery.msdn.microsoft.com/[GuidFromGallery])
+Download this extension from the [VS Gallery](https://visualstudiogallery.msdn.microsoft.com/7236a807-e877-4af6-a464-2e1dd2924d90)
 or get the [CI build](http://vsixgallery.com/extension/1fd37423-142f-4267-8221-93163d573b90/).
 
 ---------------------------------------
