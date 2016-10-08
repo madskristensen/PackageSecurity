@@ -11,7 +11,7 @@ namespace PackageSecurity
         public const string Name = "Package Security Alerts";
         public const string Description = @"Makes sure the npm and Bower packages used doesn't contain any known security vulnerabilities.";
         public const string Language = "en-US";
-        public const string Version = "0.1";
+        public const string Version = "0.3";
         public const string Author = "Mads Kristensen";
         public const string Tags = "security, npm, bower, package";
     }

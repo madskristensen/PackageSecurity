@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,7 +19,11 @@ namespace PackageSecurity
 
         public static async Task<Vulnerabilities> LoadFromExtensionPath()
         {
-            return await LoadFromFile("").ConfigureAwait(false);
+            string assembly = Assembly.GetExecutingAssembly().Location;
+            string dir = Path.GetDirectoryName(assembly);
+            string file = Path.Combine(dir, "Resources", "npmrepository.json");
+
+            return await LoadFromFile(file).ConfigureAwait(false);
         }
 
         public static async Task<Vulnerabilities> LoadFromFile(string fileName)
@@ -41,10 +46,10 @@ namespace PackageSecurity
             }
         }
 
-        public VulnerabilityLevel CheckPackage(string packageName, string version)
+        public Vulnerability CheckPackage(string packageName, string version)
         {
             if (!List.ContainsKey(packageName))
-                return VulnerabilityLevel.None;
+                return Vulnerability.Empty;
 
             var vuls = List[packageName];
             var sv = SemanticVersion.Parse(version.Trim());
@@ -57,31 +62,31 @@ namespace PackageSecurity
                 if (!string.IsNullOrEmpty(atOrAbove.OriginalText) && !string.IsNullOrEmpty(below.OriginalText))
                 {
                     if (atOrAbove.CompareTo(sv) <= 0 && below.CompareTo(sv) > 0)
-                        return GetLevel(vulnerability);
+                        return AdjustSeverity(vulnerability);
                 }
 
                 else if (!string.IsNullOrEmpty(below.OriginalText))
                 {
                     if (below.CompareTo(sv) > 0)
-                        return GetLevel(vulnerability);
+                        return AdjustSeverity(vulnerability);
                 }
 
                 else if (!string.IsNullOrEmpty(atOrAbove.OriginalText))
                 {
                     if (atOrAbove.CompareTo(sv) <= 0)
-                        return GetLevel(vulnerability);
+                        return AdjustSeverity(vulnerability);
                 }
             }
 
-            return VulnerabilityLevel.None;
+            return Vulnerability.Empty;
         }
 
-        private static VulnerabilityLevel GetLevel(Vulnerability vulnerability)
+        private static Vulnerability AdjustSeverity(Vulnerability vulnerability)
         {
             if (vulnerability.Severity == VulnerabilityLevel.None)
-                return VulnerabilityLevel.Info;
+                vulnerability.Severity = VulnerabilityLevel.Info;
 
-                return vulnerability.Severity;
+                return vulnerability;
         }
     }
 }
