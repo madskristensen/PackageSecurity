@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,17 +10,22 @@ using Microsoft.VisualStudio.Imaging.Interop;
 
 namespace PackageSecurity.Margin
 {
-    internal sealed class AlertAdornment : Image
+    internal sealed class AlertAdornment : Button
     {
-        private ConcurrentDictionary<VulnerabilityLevel, ImageSource> _cache = new ConcurrentDictionary<VulnerabilityLevel, ImageSource>();
-        private const int size = 14;
+        private const int _size = 14;
+        private Image _image = new Image();
 
         internal AlertAdornment(AlertTag alertTag)
         {
-            Height = size;
-            Width = size;
+            Height = _size;
+            Width = _size;
             Margin = new Thickness(5, 0, 0, 0);
+            Padding = new Thickness(0);
+            BorderThickness = new Thickness(0);
+            Background = Brushes.Transparent;
             Cursor = Cursors.Arrow;
+
+            AddChild(_image);
 
             Update(alertTag);
         }
@@ -27,19 +33,22 @@ namespace PackageSecurity.Margin
         internal void Update(AlertTag alertTag)
         {
             if (alertTag == null)
-            {
-                Visibility = Visibility.Collapsed;
                 return;
-            }
 
             var vul = alertTag.Vulnerability;
+            Uri url;
 
-            if (!_cache.ContainsKey(vul.Severity))
-                _cache[vul.Severity] = GetMoniker(vul.Severity).GetImage(size);
+            if (vul.Info.Any() && Uri.TryCreate(vul.Info.FirstOrDefault(), UriKind.Absolute, out url))
+            {
+                Click += (s, e) =>
+                {
+                    e.Handled = true;
+                    Process.Start(vul.Info.First());
+                };
+            }
 
-            Visibility = Visibility.Visible;
-            Source = _cache[vul.Severity];
-            ToolTip = $"Risk level: {vul.Severity}\n\nMore info at {vul.Info.FirstOrDefault()}";
+            _image.Source = GetMoniker(vul.Severity).GetImage(_size);
+            ToolTip = $"Risk level: {vul.Severity}\n\nClick for more info";
         }
 
         private ImageMoniker GetMoniker(VulnerabilityLevel level)

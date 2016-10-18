@@ -1,7 +1,8 @@
 # Road map
 
-- [ ] Unit tests
-- [ ] Adornments in JSON editor
+- [x] Unit tests
+- [x] Adornments in JSON editor
+- [x] Click adornment for more info
 - [ ] Warning on build
 
 Features that have a checkmark are complete and available for

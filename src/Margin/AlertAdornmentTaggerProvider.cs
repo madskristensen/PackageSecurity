@@ -13,7 +13,7 @@ namespace PackageSecurity.Margin
     internal sealed class ColorAdornmentTaggerProvider : IViewTaggerProvider
     {
         [Import]
-        private IBufferTagAggregatorFactoryService BufferTagAggregatorFactoryService { get; set; }
+        private IBufferTagAggregatorFactoryService TagAggregatorService { get; set; }
 
         [Import]
         private ITextDocumentFactoryService DocumentService { get; set; }
@@ -25,11 +25,9 @@ namespace PackageSecurity.Margin
             if (!DocumentService.TryGetTextDocument(buffer, out doc) || !doc.IsFileSupported())
                 return null;
 
-            return AlertAdornmentTagger.GetTagger(
-            (IWpfTextView)textView,
-            new Lazy<ITagAggregator<AlertTag>>(
-            () => BufferTagAggregatorFactoryService.CreateTagAggregator<AlertTag>(textView.TextBuffer)))
-            as ITagger<T>;
+            var lazy = new Lazy<ITagAggregator<AlertTag>>(() => TagAggregatorService.CreateTagAggregator<AlertTag>(textView.TextBuffer));
+
+            return AlertAdornmentTagger.GetTagger((IWpfTextView)textView, lazy) as ITagger<T>;
         }
     }
 }

@@ -121,7 +121,7 @@
     <value>Package Security Alerts</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>Makes sure the npm and Bower packages used doesn't contain any known security vulnerabilities.</value>
+    <value>Identifies npm and Bower packages that contains known security vulnerabilities to ensure your project is always using the most secure package versions.</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">

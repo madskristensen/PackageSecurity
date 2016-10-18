@@ -3,7 +3,9 @@
   <Metadata>
 	<Identity Id="1fd37423-142f-4267-8221-93163d573b90" Version="0.3" Language="en-US" Publisher="Mads Kristensen" />
 	<DisplayName>Package Security Alerts</DisplayName>
-	<Description xml:space="preserve">Makes sure the npm and Bower packages used doesn't contain any known security vulnerabilities.</Description>
+	<Description xml:space="preserve">Identifies npm and Bower packages that contains known security vulnerabilities to ensure your project is always using the most secure package versions.</Description>
+	<MoreInfo>https://github.com/madskristensen/PackageSecurity/</MoreInfo>
+	<ReleaseNotes>https://github.com/madskristensen/PackageSecurity/blob/master/CHANGELOG.md</ReleaseNotes>
 	<Icon>Resources\Icon.png</Icon>
 	<PreviewImage>Resources\Preview.png</PreviewImage>
 	<Tags>security, npm, bower, package</Tags>
