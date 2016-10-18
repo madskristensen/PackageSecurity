@@ -13,19 +13,19 @@ namespace PackageSecurity.Margin
             return view.Properties.GetOrCreateSingletonProperty(() => new AlertAdornmentTagger(view, colorTagger.Value));
         }
 
-        private ITagAggregator<AlertTag> colorTagger;
+        private ITagAggregator<AlertTag> _alertTagger;
 
-        private AlertAdornmentTagger(IWpfTextView view, ITagAggregator<AlertTag> colorTagger)
-        : base(view, view.TextBuffer)
+        private AlertAdornmentTagger(IWpfTextView view, ITagAggregator<AlertTag> alertTagger)
+        : base(view)
         {
-            this.colorTagger = colorTagger;
+            _alertTagger = alertTagger;
         }
 
         public void Dispose()
         {
-            this.colorTagger.Dispose();
+            _alertTagger.Dispose();
 
-            base.view.Properties.RemoveProperty(typeof(AlertAdornmentTagger));
+            view.Properties.RemoveProperty(typeof(AlertAdornmentTagger));
         }
 
         // To produce adornments that don't obscure the text, the adornment tags
@@ -38,18 +38,18 @@ namespace PackageSecurity.Margin
 
             ITextSnapshot snapshot = spans[0].Snapshot;
 
-            var colorTags = this.colorTagger.GetTags(spans);
+            var alertTags = this._alertTagger.GetTags(spans);
 
-            foreach (IMappingTagSpan<AlertTag> dataTagSpan in colorTags)
+            foreach (IMappingTagSpan<AlertTag> dataTagSpan in alertTags)
             {
-                NormalizedSnapshotSpanCollection colorTagSpans = dataTagSpan.Span.GetSpans(snapshot);
+                var alertTagSpans = dataTagSpan.Span.GetSpans(snapshot);
 
                 // Ignore data tags that are split by projection.
                 // This is theoretically possible but unlikely in current scenarios.
-                if (colorTagSpans.Count != 1)
+                if (alertTagSpans.Count != 1)
                     continue;
 
-                SnapshotSpan adornmentSpan = new SnapshotSpan(colorTagSpans[0].End, 0);
+                SnapshotSpan adornmentSpan = new SnapshotSpan(alertTagSpans[0].End, 0);
 
                 yield return Tuple.Create(adornmentSpan, (PositionAffinity?)PositionAffinity.Successor, dataTagSpan.Tag);
             }

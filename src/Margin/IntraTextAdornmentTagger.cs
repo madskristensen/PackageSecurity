@@ -33,20 +33,18 @@ namespace PackageSecurity.Margin
         : ITagger<IntraTextAdornmentTag>
         where TAdornment : UIElement
     {
-        protected readonly ITextBuffer buffer;
+        protected readonly IWpfTextView view;
         private Dictionary<SnapshotSpan, TAdornment> adornmentCache = new Dictionary<SnapshotSpan, TAdornment>();
         protected ITextSnapshot snapshot { get; private set; }
-        protected readonly ITextView view;
         private readonly List<SnapshotSpan> invalidatedSpans = new List<SnapshotSpan>();
-        private bool _isProcessing;
-        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-        protected IntraTextAdornmentTagger(ITextView view, ITextBuffer buffer)
+        protected IntraTextAdornmentTagger(IWpfTextView view)
         {
-            this.buffer = buffer;
             this.view = view;
-            this.snapshot = buffer.CurrentSnapshot;
-            this.buffer.Changed += HandleBufferChanged;
+            snapshot = view.TextBuffer.CurrentSnapshot;
+
+            this.view.LayoutChanged += HandleLayoutChanged;
+            this.view.TextBuffer.Changed += HandleBufferChanged;
         }
 
         /// <param name="span">The span of text that this adornment will elide.</param>
@@ -71,15 +69,8 @@ namespace PackageSecurity.Margin
 
         private void HandleBufferChanged(object sender, TextContentChangedEventArgs args)
         {
-            if (!_isProcessing)
-            {
-                _isProcessing = true;
-                var editedSpans = args.Changes.Select(change => new SnapshotSpan(args.After, change.NewSpan)).ToList();
-
-                InvalidateSpans(editedSpans);
-            }
-
-            _isProcessing = false;
+            var editedSpans = args.Changes.Select(change => new SnapshotSpan(args.After, change.NewSpan)).ToList();
+            InvalidateSpans(editedSpans);
         }
 
         /// <summary>
@@ -87,50 +78,44 @@ namespace PackageSecurity.Margin
         /// </summary>
         protected void InvalidateSpans(IList<SnapshotSpan> spans)
         {
-            lock (this.invalidatedSpans)
+            lock (invalidatedSpans)
             {
-                bool wasEmpty = this.invalidatedSpans.Count == 0;
-                this.invalidatedSpans.AddRange(spans);
+                bool wasEmpty = invalidatedSpans.Count == 0;
+                invalidatedSpans.AddRange(spans);
 
                 if (wasEmpty && this.invalidatedSpans.Count > 0)
-                    ((IWpfTextView)this.view).VisualElement.Dispatcher.BeginInvoke(new Action(AsyncUpdate));
+                    view.VisualElement.Dispatcher.BeginInvoke(new Action(AsyncUpdate));
             }
         }
 
         private void AsyncUpdate()
         {
-            List<SnapshotSpan> translatedSpans;
-            SnapshotPoint start, end;
-
             // Store the snapshot that we're now current with and send an event
             // for the text that has changed.
-            if (this.snapshot != this.buffer.CurrentSnapshot)
+            if (snapshot != view.TextBuffer.CurrentSnapshot)
             {
-                this.snapshot = this.buffer.CurrentSnapshot;
+                snapshot = view.TextBuffer.CurrentSnapshot;
 
                 Dictionary<SnapshotSpan, TAdornment> translatedAdornmentCache = new Dictionary<SnapshotSpan, TAdornment>();
 
-                foreach (var keyValuePair in this.adornmentCache)
-                {
-                    var key = keyValuePair.Key.TranslateTo(this.snapshot, SpanTrackingMode.EdgeExclusive);
-                    if (!translatedAdornmentCache.ContainsKey(key))
-                        translatedAdornmentCache.Add(key, keyValuePair.Value);
-                }
+                foreach (var keyValuePair in adornmentCache)
+                    translatedAdornmentCache.Add(keyValuePair.Key.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive), keyValuePair.Value);
 
-                this.adornmentCache = translatedAdornmentCache;
+                adornmentCache = translatedAdornmentCache;
             }
 
-            lock (this.invalidatedSpans)
+            List<SnapshotSpan> translatedSpans;
+            lock (invalidatedSpans)
             {
-                translatedSpans = this.invalidatedSpans.Select(s => s.TranslateTo(this.snapshot, SpanTrackingMode.EdgeInclusive)).ToList();
-                this.invalidatedSpans.Clear();
+                translatedSpans = invalidatedSpans.Select(s => s.TranslateTo(snapshot, SpanTrackingMode.EdgeInclusive)).ToList();
+                invalidatedSpans.Clear();
             }
 
             if (translatedSpans.Count == 0)
                 return;
 
-            start = translatedSpans.Select(span => span.Start).Min();
-            end = translatedSpans.Select(span => span.End).Max();
+            var start = translatedSpans.Select(span => span.Start).Min();
+            var end = translatedSpans.Select(span => span.End).Max();
 
             RaiseTagsChanged(new SnapshotSpan(start, end));
         }
@@ -140,10 +125,24 @@ namespace PackageSecurity.Margin
         /// </summary>
         protected void RaiseTagsChanged(SnapshotSpan span)
         {
-            var handler = this.TagsChanged;
-
+            var handler = TagsChanged;
             if (handler != null)
                 handler(this, new SnapshotSpanEventArgs(span));
+        }
+
+        private void HandleLayoutChanged(object sender, TextViewLayoutChangedEventArgs e)
+        {
+            SnapshotSpan visibleSpan = view.TextViewLines.FormattedSpan;
+
+            // Filter out the adornments that are no longer visible.
+            List<SnapshotSpan> toRemove = new List<SnapshotSpan>(
+                from keyValuePair
+                in adornmentCache
+                where !keyValuePair.Key.TranslateTo(visibleSpan.Snapshot, SpanTrackingMode.EdgeExclusive).IntersectsWith(visibleSpan)
+                select keyValuePair.Key);
+
+            foreach (var span in toRemove)
+                adornmentCache.Remove(span);
         }
 
 
@@ -156,16 +155,16 @@ namespace PackageSecurity.Margin
             // Translate the request to the snapshot that this tagger is current with.
 
             ITextSnapshot requestedSnapshot = spans[0].Snapshot;
-            var translatedSpans = new NormalizedSnapshotSpanCollection(spans.Select(span => span.TranslateTo(this.snapshot, SpanTrackingMode.EdgeExclusive)));
+
+            var translatedSpans = new NormalizedSnapshotSpanCollection(spans.Select(span => span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive)));
+
             // Grab the adornments.
-            var tags = GetAdornmentTagsOnSnapshot(translatedSpans).GetEnumerator();
-
-            while (tags.MoveNext())
+            foreach (var tagSpan in GetAdornmentTagsOnSnapshot(translatedSpans))
             {
-                var current = tags.Current;
-                SnapshotSpan span = current.Span.TranslateTo(requestedSnapshot, SpanTrackingMode.EdgeExclusive);
-                IntraTextAdornmentTag tag = new IntraTextAdornmentTag(current.Tag.Adornment, current.Tag.RemovalCallback, current.Tag.Affinity);
+                // Translate each adornment to the snapshot that the tagger was asked about.
+                SnapshotSpan span = tagSpan.Span.TranslateTo(requestedSnapshot, SpanTrackingMode.EdgeExclusive);
 
+                IntraTextAdornmentTag tag = new IntraTextAdornmentTag(tagSpan.Tag.Adornment, tagSpan.Tag.RemovalCallback, tagSpan.Tag.Affinity);
                 yield return new TagSpan<IntraTextAdornmentTag>(span, tag);
             }
         }
@@ -177,6 +176,9 @@ namespace PackageSecurity.Margin
                 yield break;
 
             ITextSnapshot snapshot = spans[0].Snapshot;
+
+            System.Diagnostics.Debug.Assert(snapshot == this.snapshot);
+
             // Since WPF UI objects have state (like mouse hover or animation) and are relatively expensive to create and lay out,
             // this code tries to reuse controls as much as possible.
             // The controls are stored in this.adornmentCache between the calls.
@@ -184,8 +186,7 @@ namespace PackageSecurity.Margin
             // Mark which adornments fall inside the requested spans with Keep=false
             // so that they can be removed from the cache if they no longer correspond to data tags.
             HashSet<SnapshotSpan> toRemove = new HashSet<SnapshotSpan>();
-
-            foreach (var ar in this.adornmentCache)
+            foreach (var ar in adornmentCache)
                 if (spans.IntersectsWith(new NormalizedSnapshotSpanCollection(ar.Key)))
                     toRemove.Add(ar.Key);
 
@@ -196,8 +197,7 @@ namespace PackageSecurity.Margin
                 SnapshotSpan snapshotSpan = spanDataPair.Item1;
                 PositionAffinity? affinity = spanDataPair.Item2;
                 TData adornmentData = spanDataPair.Item3;
-
-                if (this.adornmentCache.TryGetValue(snapshotSpan, out adornment))
+                if (adornmentCache.TryGetValue(snapshotSpan, out adornment))
                 {
                     if (UpdateAdornment(adornment, adornmentData))
                         toRemove.Remove(snapshotSpan);
@@ -219,15 +219,17 @@ namespace PackageSecurity.Margin
                     // can help avoid the size change and the resulting unnecessary re-format.
                     adornment.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-                    this.adornmentCache.Add(snapshotSpan, adornment);
+                    adornmentCache.Add(snapshotSpan, adornment);
                 }
 
                 yield return new TagSpan<IntraTextAdornmentTag>(snapshotSpan, new IntraTextAdornmentTag(adornment, null, affinity));
             }
 
             foreach (var snapshotSpan in toRemove)
-                this.adornmentCache.Remove(snapshotSpan);
+                adornmentCache.Remove(snapshotSpan);
         }
+
+        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
         private class Comparer : IEqualityComparer<Tuple<SnapshotSpan, PositionAffinity?, TData>>
         {
@@ -237,7 +239,6 @@ namespace PackageSecurity.Margin
                     return true;
                 if (x == null || y == null)
                     return false;
-
                 return x.Item1.Equals(y.Item1);
             }
 

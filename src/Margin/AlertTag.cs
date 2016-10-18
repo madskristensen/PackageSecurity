@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Tagging;
 
 namespace PackageSecurity.Margin
 {
-    public class AlertTag : IGlyphTag
+    public class AlertTag : ITag
     {
         public AlertTag(Vulnerability vulnerability)
         {
