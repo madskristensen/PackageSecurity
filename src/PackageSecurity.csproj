@@ -53,11 +53,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
-    <Compile Include="Margin\AlertGlyphFactory.cs" />
-    <Compile Include="Margin\AlertGlyphFactoryProvider.cs" />
+    <Compile Include="Margin\AlertAdornmentTagger.cs" />
+    <Compile Include="Margin\AlertAdornmentTaggerProvider.cs" />
     <Compile Include="Margin\AlertTag.cs" />
     <Compile Include="Margin\AlertTagger.cs" />
     <Compile Include="Margin\AlertTaggerProvider.cs" />
+    <Compile Include="Margin\AlertAdornment.cs" />
+    <Compile Include="Margin\IntraTextAdornmentTagger.cs" />
     <Compile Include="Validator\SemanticVersion.cs" />
     <Compile Include="Validator\Vulnerability.cs" />
     <Compile Include="Validator\Vulnerabilities.cs" />
@@ -112,6 +114,10 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.CoreUtility.14.3.25407\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Editor.14.3.25407\lib\net45\Microsoft.VisualStudio.Editor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.ImageCatalog, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

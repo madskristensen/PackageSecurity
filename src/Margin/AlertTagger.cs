@@ -35,7 +35,10 @@ namespace PackageSecurity.Margin
             }
         }
 
-        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+        public event EventHandler<SnapshotSpanEventArgs> TagsChanged
+        {
+            add { }
+            remove { }
+        }
     }
-
 }
