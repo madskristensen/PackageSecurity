@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace PackageSecurity.Margin
+namespace PackageSecurity
 {
     [Export(typeof(IViewTaggerProvider))]
     [ContentType("json")]

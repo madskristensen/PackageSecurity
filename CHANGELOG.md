@@ -3,8 +3,8 @@
 - [x] Unit tests
 - [x] Adornments in JSON editor
 - [x] Click adornment for more info
+- [x] Auto-update list of vulnerabilities on build
 - [ ] More descriptive tooltip
-- [ ] Auto-update list of vulnerabilities
 - [ ] Warning on build
 
 Features that have a checkmark are complete and available for

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 
-namespace PackageSecurity.Margin
+namespace PackageSecurity
 {
     internal class AlertTagger : ITagger<AlertTag>
     {

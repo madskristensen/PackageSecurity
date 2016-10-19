@@ -8,7 +8,7 @@ using System.Windows.Media;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 
-namespace PackageSecurity.Margin
+namespace PackageSecurity
 {
     internal sealed class AlertAdornment : Button
     {

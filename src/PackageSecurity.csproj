@@ -53,13 +53,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
-    <Compile Include="Margin\AlertAdornmentTagger.cs" />
-    <Compile Include="Margin\AlertAdornmentTaggerProvider.cs" />
-    <Compile Include="Margin\AlertTag.cs" />
-    <Compile Include="Margin\AlertTagger.cs" />
-    <Compile Include="Margin\AlertTaggerProvider.cs" />
-    <Compile Include="Margin\AlertAdornment.cs" />
-    <Compile Include="Margin\IntraTextAdornmentTagger.cs" />
+    <Compile Include="Adornment\AlertAdornmentTagger.cs" />
+    <Compile Include="Adornment\AlertAdornmentTaggerProvider.cs" />
+    <Compile Include="Tagger\AlertTag.cs" />
+    <Compile Include="Tagger\AlertTagger.cs" />
+    <Compile Include="Tagger\AlertTaggerProvider.cs" />
+    <Compile Include="Adornment\AlertAdornment.cs" />
+    <Compile Include="Adornment\IntraTextAdornmentTagger.cs" />
     <Compile Include="Validator\SemanticVersion.cs" />
     <Compile Include="Validator\Vulnerability.cs" />
     <Compile Include="Validator\Vulnerabilities.cs" />

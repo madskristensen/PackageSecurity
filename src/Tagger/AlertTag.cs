@@ -1,7 +1,6 @@
-﻿using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Tagging;
+﻿using Microsoft.VisualStudio.Text.Tagging;
 
-namespace PackageSecurity.Margin
+namespace PackageSecurity
 {
     public class AlertTag : ITag
     {
