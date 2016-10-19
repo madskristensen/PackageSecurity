@@ -48,7 +48,7 @@ namespace PackageSecurity
             }
 
             _image.Source = GetMoniker(vul.Severity).GetImage(_size);
-            ToolTip = $"Risk level: {vul.Severity}\n\nClick for more info";
+            ToolTip = $"This package contains security issues.\nRisk level: {vul.Severity}\n\nClick for more info";
         }
 
         private ImageMoniker GetMoniker(VulnerabilityLevel level)
