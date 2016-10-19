@@ -14,15 +14,32 @@ See the [change log](CHANGELOG.md) for changes and road map.
 
 ## Features
 
-- Works with Bower and npm
-- Integrates with JSON editor (coming soon...)
-- Shows warnings on build (coming soon...)
+- Shows warnings for packages known to have security issues
+- Works with both Bower and npm
+- Integrates with JSON editor
+- Based on [retire.js](http://retirejs.github.io/retire.js/)
 
-### JSON editor
-coming soon...
+### Security risk levels
+There are 3 types of security risk levels:
 
-### Warnings on build
-coming soon...
+1. Low
+2. Medium
+3. High
+
+When you open package.json or bower.json, icons representing
+the security risk are shown next to the packages.
+
+![Adornments](art/adornments.png)
+
+Hovering the mouse over the warning icons gives more details
+about the security risk.
+
+![Adornments Hover](art/adornments-hover.png)
+
+Clicking the icons will open the browser to a page containing
+more details about the specific risk and show information
+about how to mitigate it. Usually the mitigation is to update
+the package to the latest version.
 
 ## Contribute
 Check out the [contribution guidelines](.github/CONTRIBUTING.md)
