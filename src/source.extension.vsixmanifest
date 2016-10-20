@@ -1,24 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-	<Identity Id="1fd37423-142f-4267-8221-93163d573b90" Version="0.5" Language="en-US" Publisher="Mads Kristensen" />
-	<DisplayName>Package Security Alerts</DisplayName>
-	<Description xml:space="preserve">Identifies npm and Bower packages that contains known security vulnerabilities to ensure your project is always using the most secure package versions.</Description>
-	<MoreInfo>https://github.com/madskristensen/PackageSecurity/</MoreInfo>
-	<ReleaseNotes>https://github.com/madskristensen/PackageSecurity/blob/master/CHANGELOG.md</ReleaseNotes>
-	<Icon>Resources\Icon.png</Icon>
-	<PreviewImage>Resources\Preview.png</PreviewImage>
-	<Tags>security, npm, bower, package</Tags>
-  </Metadata>
-  <Installation>
-	<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
-  </Installation>
-  <Dependencies>
-	<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-	<Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]" />
-  </Dependencies>
-  <Assets>
-	<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-	<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-  </Assets>
+    <Metadata>
+        <Identity Id="1fd37423-142f-4267-8221-93163d573b90" Version="0.5" Language="en-US" Publisher="Mads Kristensen" />
+        <DisplayName>Package Security Alerts</DisplayName>
+        <Description xml:space="preserve">Identifies npm and Bower packages that contains known security vulnerabilities to ensure your project is always using the most secure package versions.</Description>
+        <MoreInfo>https://github.com/madskristensen/PackageSecurity/</MoreInfo>
+        <ReleaseNotes>https://github.com/madskristensen/PackageSecurity/blob/master/CHANGELOG.md</ReleaseNotes>
+        <Icon>Resources\Icon.png</Icon>
+        <PreviewImage>Resources\Preview.png</PreviewImage>
+        <Tags>security, npm, bower, package</Tags>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="14.0" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="15.0" />
+    </Installation>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    </Assets>
 </PackageManifest>
