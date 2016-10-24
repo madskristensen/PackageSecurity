@@ -22,7 +22,7 @@ namespace PackageSecurity.Test
         [TestMethod]
         public void LoadVulnerabilities()
         {
-            Assert.AreEqual(77, vulners.List.Count(), "No vulnurabilies loaded");
+            Assert.IsTrue(vulners.List.Count() >= 107, "No vulnurabilies loaded");
         }
 
         [TestMethod]
