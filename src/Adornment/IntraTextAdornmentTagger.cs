@@ -155,8 +155,16 @@ namespace PackageSecurity
             // Translate the request to the snapshot that this tagger is current with.
 
             ITextSnapshot requestedSnapshot = spans[0].Snapshot;
+            NormalizedSnapshotSpanCollection translatedSpans = null;
 
-            var translatedSpans = new NormalizedSnapshotSpanCollection(spans.Select(span => span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive)));
+            try
+            {
+                translatedSpans = new NormalizedSnapshotSpanCollection(spans.Select(span => span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive)));
+            }
+            catch (Exception)
+            {
+                yield break;
+            }
 
             // Grab the adornments.
             foreach (var tagSpan in GetAdornmentTagsOnSnapshot(translatedSpans))
