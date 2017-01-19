@@ -169,7 +169,7 @@
 	"jquery-ujs": {
 		"vulnerabilities": [
 			{
-					"below" : "1.0.4", 
+					"below" : "1.0.4",
 					"info": [ "https://nodesecurity.io/advisories/jquery_ujs_csrf" ]
 			}
 		]
@@ -200,7 +200,7 @@
 	},
 
 	"handlebars" : {
-		"vulnerabilities" : [ 
+		"vulnerabilities" : [
 			{
 				"below" : "1.0.0.beta.3",
 				"severity": "high",
@@ -283,7 +283,7 @@
 				"info" : [ "https://nodesecurity.io/advisories/st_directory_traversal" ]
 			}
 		]
-	},	
+	},
 	"hapi": {
 		"vulnerabilities" : [
 			{
@@ -311,7 +311,7 @@
 				"identifiers": {
 					"summary" : "Could allow forbidden CORS headers"
 				},
-				"info" : [ 
+				"info" : [
 					"https://nodesecurity.io/advisories/45",
 					"https://github.com/hapijs/hapi/issues/2850",
 					"https://github.com/hapijs/hapi/issues/2840"
@@ -323,7 +323,7 @@
 				"identifiers": {
 					"summary" : "Denial of service - Potential socket exhaustion"
 				},
-				"info" : [ 
+				"info" : [
 					"https://nodesecurity.io/advisories/63",
 					"https://github.com/hapijs/hapi/commit/aab2496e930dce5ee1ab28eecec94e0e45f03580",
 					"https://github.com/jfhbrook/node-ecstatic/pull/179"
@@ -335,7 +335,7 @@
 				"identifiers": {
 					"summary" : "Route level CORS config overrides connection level defaults"
 				},
-				"info" : [ 
+				"info" : [
 					"https://nodesecurity.io/advisories/65"
 				]
 			}
@@ -371,10 +371,10 @@
 				},
 				"info" : [ "https://nodesecurity.io/advisories/printer_potential_command_injection" ]
 			}
-		]		
+		]
 	},
 	"ms" : {
-		"vulnerabilities" : [ 
+		"vulnerabilities" : [
 			{
 				"below" : "0.7.1",
 				"severity": "medium",
@@ -386,7 +386,7 @@
 	},
 
 	"handlebars-runtime" : {
-		"vulnerabilities" : [ 
+		"vulnerabilities" : [
 			{
 				"below" : "1.0.0.beta.3",
 				"severity": "high",
@@ -666,8 +666,8 @@
 				"identifiers": {
 					"summary": "discloses root path"
 				},
-				"info" : [ 
-					"https://nodesecurity.io/advisories/56", 
+				"info" : [
+					"https://nodesecurity.io/advisories/56",
 					"https://github.com/pillarjs/send/pull/70",
 					"https://github.com/expressjs/serve-static/blob/master/HISTORY.md#181--2015-01-20"
 				]
@@ -729,24 +729,45 @@
         "info": [ "https://nodesecurity.io/advisories/135" ]
       }
 		]
-	},	
+	},
 	"sequelize-restful": {
 		"vulnerabilities" : [ { "below" : "0.3.1", "info" : [ "https://github.com/sequelize/sequelize-restful/issues/16" ] } ]
 	},
 	"sequelize" : {
-		"vulnerabilities" : [ 
+		"vulnerabilities" : [
 			{
 				"below" : "2.0.0-rc8",
 				"severity" : "high",
-				"identifiers" : { "CVE":[ "CVE-2015-1369" ] }, 
-				"info" : [ "https://nodesecurity.io/advisories/sequelize-sql-injection-order", "https://github.com/sequelize/sequelize/issues/2906" ] 
+				"identifiers" : { "CVE":[ "CVE-2015-1369" ] },
+				"info" : [ "https://nodesecurity.io/advisories/sequelize-sql-injection-order", "https://github.com/sequelize/sequelize/issues/2906" ]
 			},
       {
         "below": "3.23.6",
         "identifiers": { "advisory": "SQL Injection via GeoJSON" },
         "info": [ "https://nodesecurity.io/advisories/122" ]
-      } 
-		]	
+      },
+      {
+        "below": "3.17.0",
+        "identifiers": { "advisory": "SQL injection" },
+        "info": [ "https://nodesecurity.io/advisories/112" ]
+      },
+      {
+        "below": "3.0.0",
+        "identifiers": { "advisory": "Potential SQL Injection" },
+        "info": [ "https://nodesecurity.io/advisories/109" ]
+      },
+      {
+        "below": "1.7.0-alpha3",
+        "identifiers": { "advisory": "SQL injection" },
+        "info": [ "https://nodesecurity.io/advisories/113" ]
+      },
+      {
+        "below": "3.20.0",
+        "identifiers": { "advisory": "Improper Escaping of Bound Arrays" },
+        "info": [ "https://nodesecurity.io/advisories/102" ]
+      }
+
+		]
 	},
 	"paypal-ipn": {
 		"vulnerabilities" : [
@@ -926,7 +947,7 @@
 				"info" : [ "https://nodesecurity.io/advisories/50", "https://github.com/vdemedes/secure-compare/pull/1" ]
 			}
 		]
-	},	
+	},
 	"remarkable": {
 		"vulnerabilities" : [
 			{
@@ -938,7 +959,7 @@
 		]
 	},
 	"validator" : {
-		"vulnerabilities" : [ 
+		"vulnerabilities" : [
 			{
 				"below" : "3.22.1",
 				"severity": "medium",
@@ -955,7 +976,7 @@
 					"advisory": "validator_XSS_Filter_Bypass_via_Encoded_URL"
 				},
 				"info" : [ "http://nodesecurity.io/advisories/validator_XSS_Filter_Bypass_via_Encoded_URL" ] }
-		]	
+		]
 	},
 	"semver": {
 		"vulnerabilities" : [
@@ -1284,7 +1305,7 @@
   "gmail-js": {
     "vulnerabilities": [
       {
- 				"below":"100.0.0",     	
+ 				"below":"100.0.0",
         "atOrAbove": "0.0.0",
         "identifiers": { "advisory": "DOM-based XSS" },
         "info": [ "https://nodesecurity.io/advisories/125" ]
@@ -1319,7 +1340,98 @@
         "info": [ "https://nodesecurity.io/advisories/117" ]
        }
     ]
+  },
+  "waterline-sequel": {
+    "vulnerabilities": [
+      {
+      	"atOrAbove" : "0.5.0",
+        "below": "0.5.1",
+        "identifiers": { "advisory": "SQL injection" },
+        "info": [ "https://nodesecurity.io/advisories/115" ]
+       }
+    ]
+  },
+  "igniteui": {
+    "vulnerabilities": [
+      {
+        "below": "0.0.6",
+        "identifiers": { "advisory": "Resources Downloaded over Insecure Protocol" },
+        "info": [ "https://nodesecurity.io/advisories/116" ]
+       }
+    ]
+  },
+  "jwt-simple": {
+    "vulnerabilities": [
+      {
+        "below": "0.3.0",
+        "identifiers": { "advisory": "Forgeable Public/Private Tokens" },
+        "info": [ "https://nodesecurity.io/advisories/87" ]
+       }
+    ]
+  },
+  "appium-chromedriver": {
+    "vulnerabilities": [
+      {
+        "below": "2.9.4",
+        "identifiers": { "advisory": "Downloads Resources over HTTP" },
+        "info": [ "https://nodesecurity.io/advisories/162" ]
+       }
+    ]
+  },
+  "aerospike": {
+    "vulnerabilities": [
+      {
+        "below": "2.4.2",
+        "identifiers": { "advisory": "Downloads Resources over HTTP" },
+        "info": [ "https://nodesecurity.io/advisories/167" ]
+       }
+    ]
+  },
+  "selenium-download": {
+    "vulnerabilities": [
+      {
+        "below": "2.0.7",
+        "identifiers": { "advisory": "Downloads Resources over HTTP" },
+        "info": [ "https://nodesecurity.io/advisories/164" ]
+       }
+    ]
+  },
+  "galenframework-cli": {
+    "vulnerabilities": [
+      {
+        "below": "2.3.1",
+        "identifiers": { "advisory": "Downloads Resources over HTTP" },
+        "info": [ "https://nodesecurity.io/advisories/170" ]
+       }
+    ]
+  },
+  "passport-azure-ad": {
+    "vulnerabilities": [
+      {
+        "atOrAbove": "1.0.0",
+        "below" : "1.4.6",
+        "identifiers": { "advisory": "Authentication bypass" },
+        "info": [ "https://nodesecurity.io/advisories/151" ]
+      },
+      {
+        "atOrAbove": "2.0.0",
+        "below" : "2.0.1",
+        "identifiers": { "advisory": "Authentication bypass" },
+        "info": [ "https://nodesecurity.io/advisories/151" ]
+      }
+    ]
+  },
+  "bitty": {
+    "vulnerabilities": [
+      {
+        "below": "100.0.0",
+        "identifiers": { "advisory": "Directory Traversal" },
+        "info": [ "https://nodesecurity.io/advisories/150" ]
+       }
+    ]
   }
+
+
 
 
 
