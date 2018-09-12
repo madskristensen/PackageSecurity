@@ -8,7 +8,7 @@ using task = System.Threading.Tasks.Task;
 
 namespace PackageSecurity
 {
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
     [Guid(PackageGuidString)]
 
