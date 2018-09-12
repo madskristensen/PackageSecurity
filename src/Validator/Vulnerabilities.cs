@@ -32,13 +32,13 @@ namespace PackageSecurity
 
             using (var reader = new StreamReader(fileName))
             {
-                var json = await reader.ReadToEndAsync().ConfigureAwait(false);
+                string json = await reader.ReadToEndAsync().ConfigureAwait(false);
                 var obj = JObject.Parse(json);
 
-                foreach (var child in obj.Children<JProperty>())
+                foreach (JProperty child in obj.Children<JProperty>())
                 {
-                    var content = child.Children().First().Values().First().ToString();
-                    var vulners = JsonConvert.DeserializeObject<List<Vulnerability>>(content);
+                    string content = child.Children().First().Values().First().ToString();
+                    List<Vulnerability> vulners = JsonConvert.DeserializeObject<List<Vulnerability>>(content);
                     list.Add(child.Name, vulners);
                 }
 
@@ -51,10 +51,10 @@ namespace PackageSecurity
             if (!List.ContainsKey(packageName))
                 return Vulnerability.Empty;
 
-            var vuls = List[packageName];
+            IEnumerable<Vulnerability> vuls = List[packageName];
             var sv = SemanticVersion.Parse(version.Trim());
 
-            foreach (var vulnerability in vuls)
+            foreach (Vulnerability vulnerability in vuls)
             {
                 var atOrAbove = SemanticVersion.Parse(vulnerability.AtOrAbove);
                 var below = SemanticVersion.Parse(vulnerability.Below);

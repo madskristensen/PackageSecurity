@@ -16,19 +16,19 @@ namespace PackageSecurity
             if (spans.Count == 0 || PackageSecurityPackage.Vulnurabilities == null)
                 yield break;
 
-            var span = spans.First();
+            SnapshotSpan span = spans.First();
 
-            var line = span.Snapshot.GetLineFromPosition(span.Start.Position);
-            var text = line.Extent.GetText();
+            ITextSnapshotLine line = span.Snapshot.GetLineFromPosition(span.Start.Position);
+            string text = line.Extent.GetText();
 
-            var match = _regex.Match(text);
+            Match match = _regex.Match(text);
 
             if (match.Success)
             {
-                var name = match.Groups["name"].Value;
-                var version = match.Groups["version"].Value;
+                string name = match.Groups["name"].Value;
+                string version = match.Groups["version"].Value;
 
-                var vul = PackageSecurityPackage.Vulnurabilities.CheckPackage(name, version);
+                Vulnerability vul = PackageSecurityPackage.Vulnurabilities.CheckPackage(name, version);
 
                 if (vul.Severity != VulnerabilityLevel.None)
                     yield return new TagSpan<AlertTag>(line.Extent, new AlertTag(vul));

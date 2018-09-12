@@ -35,7 +35,7 @@ namespace PackageSecurity
             if (alertTag == null)
                 return;
 
-            var vul = alertTag.Vulnerability;
+            Vulnerability vul = alertTag.Vulnerability;
             Uri url;
 
             if (vul.Info.Any() && Uri.TryCreate(vul.Info.FirstOrDefault(), UriKind.Absolute, out url))

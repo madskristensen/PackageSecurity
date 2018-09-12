@@ -98,7 +98,7 @@ namespace PackageSecurity
 
                 Dictionary<SnapshotSpan, TAdornment> translatedAdornmentCache = new Dictionary<SnapshotSpan, TAdornment>();
 
-                foreach (var keyValuePair in adornmentCache)
+                foreach (KeyValuePair<SnapshotSpan, TAdornment> keyValuePair in adornmentCache)
                     translatedAdornmentCache.Add(keyValuePair.Key.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive), keyValuePair.Value);
 
                 adornmentCache = translatedAdornmentCache;
@@ -114,8 +114,8 @@ namespace PackageSecurity
             if (translatedSpans.Count == 0)
                 return;
 
-            var start = translatedSpans.Select(span => span.Start).Min();
-            var end = translatedSpans.Select(span => span.End).Max();
+            SnapshotPoint start = translatedSpans.Select(span => span.Start).Min();
+            SnapshotPoint end = translatedSpans.Select(span => span.End).Max();
 
             RaiseTagsChanged(new SnapshotSpan(start, end));
         }
@@ -125,7 +125,7 @@ namespace PackageSecurity
         /// </summary>
         protected void RaiseTagsChanged(SnapshotSpan span)
         {
-            var handler = TagsChanged;
+            EventHandler<SnapshotSpanEventArgs> handler = TagsChanged;
             if (handler != null)
                 handler(this, new SnapshotSpanEventArgs(span));
         }
@@ -141,7 +141,7 @@ namespace PackageSecurity
                 where !keyValuePair.Key.TranslateTo(visibleSpan.Snapshot, SpanTrackingMode.EdgeExclusive).IntersectsWith(visibleSpan)
                 select keyValuePair.Key);
 
-            foreach (var span in toRemove)
+            foreach (SnapshotSpan span in toRemove)
                 adornmentCache.Remove(span);
         }
 
@@ -167,7 +167,7 @@ namespace PackageSecurity
             }
 
             // Grab the adornments.
-            foreach (var tagSpan in GetAdornmentTagsOnSnapshot(translatedSpans))
+            foreach (TagSpan<IntraTextAdornmentTag> tagSpan in GetAdornmentTagsOnSnapshot(translatedSpans))
             {
                 // Translate each adornment to the snapshot that the tagger was asked about.
                 SnapshotSpan span = tagSpan.Span.TranslateTo(requestedSnapshot, SpanTrackingMode.EdgeExclusive);
@@ -194,11 +194,11 @@ namespace PackageSecurity
             // Mark which adornments fall inside the requested spans with Keep=false
             // so that they can be removed from the cache if they no longer correspond to data tags.
             HashSet<SnapshotSpan> toRemove = new HashSet<SnapshotSpan>();
-            foreach (var ar in adornmentCache)
+            foreach (KeyValuePair<SnapshotSpan, TAdornment> ar in adornmentCache)
                 if (spans.IntersectsWith(new NormalizedSnapshotSpanCollection(ar.Key)))
                     toRemove.Add(ar.Key);
 
-            foreach (var spanDataPair in GetAdornmentData(spans).Distinct(new Comparer()))
+            foreach (Tuple<SnapshotSpan, PositionAffinity?, TData> spanDataPair in GetAdornmentData(spans).Distinct(new Comparer()))
             {
                 // Look up the corresponding adornment or create one if it's new.
                 TAdornment adornment;
@@ -233,7 +233,7 @@ namespace PackageSecurity
                 yield return new TagSpan<IntraTextAdornmentTag>(snapshotSpan, new IntraTextAdornmentTag(adornment, null, affinity));
             }
 
-            foreach (var snapshotSpan in toRemove)
+            foreach (SnapshotSpan snapshotSpan in toRemove)
                 adornmentCache.Remove(snapshotSpan);
         }
 

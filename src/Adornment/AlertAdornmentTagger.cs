@@ -38,11 +38,11 @@ namespace PackageSecurity
 
             ITextSnapshot snapshot = spans[0].Snapshot;
 
-            var alertTags = this._alertTagger.GetTags(spans);
+            IEnumerable<IMappingTagSpan<AlertTag>> alertTags = this._alertTagger.GetTags(spans);
 
             foreach (IMappingTagSpan<AlertTag> dataTagSpan in alertTags)
             {
-                var alertTagSpans = dataTagSpan.Span.GetSpans(snapshot);
+                NormalizedSnapshotSpanCollection alertTagSpans = dataTagSpan.Span.GetSpans(snapshot);
 
                 // Ignore data tags that are split by projection.
                 // This is theoretically possible but unlikely in current scenarios.
